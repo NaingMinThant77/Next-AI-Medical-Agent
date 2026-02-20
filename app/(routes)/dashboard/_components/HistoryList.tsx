@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import AddNewSessionDialog from "./AddNewSessionDialog";
 
 const HistoryList = () => {
   const [historyList, setHistoryList] = useState([]);
@@ -18,7 +18,7 @@ const HistoryList = () => {
           />
           <h2 className="text-xl font-bold mt-3">No Recent Consultations</h2>
           <p>It looks like you have no recent consultations</p>
-          <Button className="mt-3">+ Start a Consultation</Button>
+          <AddNewSessionDialog />
         </div>
       ) : (
         <p className="text-center text-gray-500 font-bold">No history found</p>
