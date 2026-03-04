@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,12 +17,15 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { doctorAgent } from "./DockerAgentCard";
 import SuggestedDoctorCard from "./SuggestedDoctorCard";
+import { useRouter } from "next/navigation";
 
 const AddNewSessionDialog = () => {
   const [note, setNote] = useState("");
   const [loading, setLoading] = useState(false);
   const [suggestedDoctors, setSuggestedDoctors] = useState<doctorAgent[]>();
   const [selectedDoctor, setSelectedDoctor] = useState<doctorAgent>();
+
+  const router = useRouter();
 
   const OnClickNext = async () => {
     setLoading(true);
@@ -40,7 +44,10 @@ const AddNewSessionDialog = () => {
       selectedDoctor: selectedDoctor,
     });
     console.log(result.data);
-    if (result.data.sessionId) console.log(result.data.sessionId);
+    if (result.data.sessionId) {
+      console.log(result.data.sessionId);
+      router.push(`/dashboard/medical-agent/${result.data.sessionId}`);
+    }
 
     setLoading(false);
   };
@@ -74,6 +81,7 @@ const AddNewSessionDialog = () => {
                       key={index}
                       doctorAgent={doctor}
                       setSelectedDoctor={setSelectedDoctor}
+                      // @ts-ignore
                       selectedDoctor={selectedDoctor}
                     />
                   ))}

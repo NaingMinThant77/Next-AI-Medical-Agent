@@ -14,19 +14,19 @@ const SuggestedDoctorCard = ({
 }: props) => {
   return (
     <div
-      className={`flex flex-col justify-center items-center border rounded-2xl shadow p-2 hover:border-blue-500 cursor-pointer ${selectedDoctor.id === doctorAgent.id ? "border-blue-500" : ""}`}
+      className={`flex flex-col justify-center items-center border rounded-2xl shadow p-2 hover:border-blue-500 cursor-pointer ${selectedDoctor?.id === doctorAgent?.id ? "border-blue-500" : ""}`}
       onClick={() => setSelectedDoctor(doctorAgent)}
     >
       <Image
-        src={doctorAgent.image || ""}
-        alt={doctorAgent.specialist}
+        src={doctorAgent?.image || ""}
+        alt={doctorAgent?.specialist}
         width={70}
         height={70}
         className="w-[50px] h-[50px] object-cover rounded-4xl"
       />
-      <h2 className="font-bold text-sm">{doctorAgent.specialist}</h2>
+      <h2 className="font-bold text-sm">{doctorAgent?.specialist}</h2>
       <p className="text-xs line-clamp-2 text-center">
-        {doctorAgent.description}
+        {doctorAgent?.description}
       </p>
     </div>
   );
