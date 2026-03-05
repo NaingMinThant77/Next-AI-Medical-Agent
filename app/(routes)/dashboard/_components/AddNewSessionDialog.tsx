@@ -35,8 +35,6 @@ const AddNewSessionDialog = () => {
     setLoading(false);
   };
 
-  console.log(suggestedDoctors);
-
   const OnStartConsultation = async () => {
     setLoading(true);
     const result = await axios.post("/api/session-chat", {
@@ -68,7 +66,7 @@ const AddNewSessionDialog = () => {
                 <h2>Add Symthoms or Any Other Details</h2>
                 <Textarea
                   placeholder="Add Detail here..."
-                  className="mt-3 h-[160px]"
+                  className="mt-3 h-40"
                   onChange={(e) => setNote(e.target.value)}
                 />
               </div>
@@ -76,15 +74,23 @@ const AddNewSessionDialog = () => {
               <div>
                 <h2 className="mb-3 text-bold text-lg">Select a Doctor</h2>
                 <div className="grid grid-cols-2 gap-2">
-                  {suggestedDoctors?.map((doctor, index) => (
-                    <SuggestedDoctorCard
-                      key={index}
-                      doctorAgent={doctor}
-                      setSelectedDoctor={setSelectedDoctor}
-                      // @ts-ignore
-                      selectedDoctor={selectedDoctor}
-                    />
-                  ))}
+                  {Array.isArray(suggestedDoctors) &&
+                  suggestedDoctors.length > 0 ? (
+                    suggestedDoctors.map((doctor, index) => (
+                      <SuggestedDoctorCard
+                        key={index}
+                        doctorAgent={doctor}
+                        setSelectedDoctor={setSelectedDoctor}
+                        // @ts-ignore
+                        selectedDoctor={selectedDoctor}
+                      />
+                    ))
+                  ) : (
+                    <div className="col-span-2 text-center text-gray-500 py-4">
+                      No doctors available. Please try again with different
+                      symptoms.
+                    </div>
+                  )}
                 </div>
               </div>
             )}

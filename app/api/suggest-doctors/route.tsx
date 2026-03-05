@@ -27,9 +27,24 @@ export async function POST(req: NextRequest) {
       .trim()
       .replace("```json", "")
       .replace("```", "");
-    const JSONResp = JSON.parse(Resp);
+
+    let JSONResp;
+    try {
+      JSONResp = JSON.parse(Resp);
+    } catch (parseError) {
+      console.error("JSON parsing failed:", parseError, "Response:", Resp);
+      return NextResponse.json([]);
+    }
+
+    // Ensure we always return an array
+    if (!Array.isArray(JSONResp)) {
+      console.warn("API response is not an array:", JSONResp);
+      return NextResponse.json([]);
+    }
+
     return NextResponse.json(JSONResp);
   } catch (e) {
-    return NextResponse.json(e);
+    console.error("API error:", e);
+    return NextResponse.json([]);
   }
 }
