@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { FeatureBentoGrid } from "@/app/_components/FeatureBentoGrid";
 import { Button } from "@/components/ui/button";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { motion } from "motion/react";
@@ -9,100 +8,101 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="relative lg:m-4 m-0 flex max-w-full flex-col items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <Navbar />
-      <div className="absolute inset-y-0 left-0 h-full w-px bg-neutral-200/80 dark:bg-neutral-800/80">
-        <div className="absolute top-0 h-40 w-px bg-gradient-to-b from-transparent via-blue-500 to-transparent" />
-      </div>
-      <div className="absolute inset-y-0 right-0 h-full w-px bg-neutral-200/80 dark:bg-neutral-800/80">
-        <div className="absolute h-40 w-px bg-gradient-to-b from-transparent via-blue-500 to-transparent" />
-      </div>
-      <div className="absolute inset-x-0 bottom-0 h-px w-full bg-neutral-200/80 dark:bg-neutral-800/80">
-        <div className="absolute mx-auto h-px w-40 bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
-      </div>
-      <div className="px-4 py-10 md:py-20">
-        <h1 className="relative z-10 mx-auto max-w-4xl text-center text-2xl font-bold text-slate-700 md:text-4xl lg:text-7xl dark:text-slate-300">
-          {"🩺Revolutionize Patient Care with AI Voice Agent"
-            .split(" ")
-            .map((word, index) => (
-              <motion.span
-                key={index}
-                initial={{ opacity: 0, filter: "blur(4px)", y: 10 }}
-                animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-                transition={{
-                  duration: 0.3,
-                  delay: index * 0.1,
-                  ease: "easeInOut",
-                }}
-                className="mr-2 inline-block"
-              >
-                {word}
-              </motion.span>
-            ))}
-        </h1>
-        <motion.p
-          initial={{
-            opacity: 0,
-          }}
-          animate={{
-            opacity: 1,
-          }}
-          transition={{
-            duration: 0.3,
-            delay: 0.8,
-          }}
-          className="relative z-10 mx-auto max-w-xl py-4 text-center text-lg font-normal text-neutral-600 dark:text-neutral-400"
-        >
-          Deliver instant, acccurate medical assistance through natural voice
-          conversation. Automate appointment scheduling, symptoms tracking, and
-          follow-up care-24/7.
-        </motion.p>
-        <Link href="/sign-in">
-          <motion.div
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            transition={{
-              duration: 0.3,
-              delay: 1,
-            }}
-            className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4"
-          >
-            <button className="w-60 transform rounded-lg bg-black px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200">
-              Get Started
-            </button>
-          </motion.div>
-        </Link>
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 10,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            duration: 0.3,
-            delay: 1.2,
-          }}
-          className="relative z-10 mt-20 rounded-3xl border border-neutral-200 bg-neutral-100 p-4 shadow-md dark:border-neutral-800 dark:bg-neutral-900"
-        >
-          <div className="w-full overflow-hidden rounded-xl border border-gray-300 dark:border-gray-700">
-            <img
-              src="https://assets.aceternity.com/pro/aceternity-landing.webp"
-              alt="Landing page preview"
-              className="aspect-[16/9] h-auto w-full object-cover"
-              height={1000}
-              width={1000}
-            />
+      <div className="relative flex max-w-full flex-col items-center justify-center px-4 py-10 md:py-20">
+        {/* Decorative Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 opacity-20 blur-3xl" />
+          <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 opacity-20 blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-blue-300 to-purple-300 opacity-10 blur-3xl" />
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 w-full max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h1 className="relative z-10 mx-auto max-w-4xl text-center text-3xl font-bold text-gray-900 md:text-5xl lg:text-7xl mb-6">
+              {"🩺Revolutionize Patient Care with AI Voice Agent"
+                .split(" ")
+                .map((word, index) => (
+                  <motion.span
+                    key={index}
+                    initial={{ opacity: 0, filter: "blur(4px)", y: 10 }}
+                    animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: index * 0.1,
+                      ease: "easeInOut",
+                    }}
+                    className="mr-2 inline-block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+            </h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.8 }}
+              className="relative z-10 mx-auto max-w-2xl py-4 text-center text-lg font-normal text-gray-600 leading-relaxed"
+            >
+              Deliver instant, accurate medical assistance through natural voice
+              conversation. Automate appointment scheduling, symptoms tracking,
+              and follow-up care—24/7.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: 1 }}
+              className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4"
+            >
+              <Link href="/sign-in">
+                <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full px-8 py-3 shadow-lg transition-all duration-300 hover:shadow-xl transform hover:-translate-y-0.5">
+                  Get Started
+                </Button>
+              </Link>
+              <Link href="/dashboard">
+                <Button
+                  variant="outline"
+                  className="rounded-full px-8 py-3 border-2 border-gray-300 hover:border-blue-500 transition-all duration-300"
+                >
+                  View Dashboard
+                </Button>
+              </Link>
+            </motion.div>
           </div>
-        </motion.div>
+
+          {/* Preview Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 1.2 }}
+            className="relative z-10 mt-16"
+          >
+            <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8">
+              <div className="mb-4">
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Experience the Future of Healthcare
+                </h3>
+                <p className="text-gray-600">
+                  AI-powered medical consultations at your fingertips
+                </p>
+              </div>
+              <div className="w-full overflow-hidden rounded-2xl border border-gray-200 shadow-inner">
+                <img
+                  src="MediVoiceAI.jpeg"
+                  alt="Landing page preview"
+                  className="aspect-[16/9] h-auto w-full object-cover"
+                  height={1000}
+                  width={1000}
+                />
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
-      <FeatureBentoGrid />
     </div>
   );
 }
@@ -110,25 +110,36 @@ export default function Home() {
 const Navbar = () => {
   const { user } = useUser();
   return (
-    <nav className="flex w-full items-center justify-between border-t border-b border-neutral-200 px-4 py-4 dark:border-neutral-800">
-      <div className="flex items-center gap-2">
-        <div className="size-7 rounded-full bg-gradient-to-br from-violet-500 to-pink-500" />
-        <h1 className="text-base font-bold md:text-2xl">MediVoice AI</h1>
-      </div>
-      {!user ? (
-        <Link href={"/sign-in"}>
-          <button className="w-24 transform rounded-lg bg-black px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 md:w-32 dark:bg-white dark:text-black dark:hover:bg-gray-200">
-            Login
-          </button>
-        </Link>
-      ) : (
-        <div className="flex items-center gap-2">
-          <UserButton />
-          <Button asChild>
-            <Link href="/dashboard">Dashboard</Link>
-          </Button>
+    <nav className="bg-white/80 backdrop-blur-lg border-b border-white/20 px-6 py-4 sticky top-0 z-50 shadow-sm">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg" />
+            <div className="absolute inset-0 w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 opacity-50 blur-md" />
+          </div>
+          <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            MediVoice AI
+          </h1>
         </div>
-      )}
+
+        {!user ? (
+          <Link href="/sign-in">
+            <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full px-6 py-2 shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5">
+              Login
+            </Button>
+          </Link>
+        ) : (
+          <div className="flex items-center gap-3">
+            <UserButton />
+            <Button
+              asChild
+              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full px-6 py-2 shadow-md transition-all duration-300 hover:shadow-lg"
+            >
+              <Link href="/dashboard">Dashboard</Link>
+            </Button>
+          </div>
+        )}
+      </div>
     </nav>
   );
 };
