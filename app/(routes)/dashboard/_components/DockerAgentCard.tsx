@@ -1,7 +1,10 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Star, Lock } from "lucide-react";
 import Image from "next/image";
-import AddNewSessionDialog from "./AddNewSessionDialog";
+import React from "react";
+import { toast } from "sonner";
 
 export type doctorAgent = {
   id: number;
@@ -15,9 +18,21 @@ export type doctorAgent = {
 
 type props = {
   doctorAgent: doctorAgent;
+  onConsult?: (doctorAgent: doctorAgent) => void;
 };
 
-const DockerAgentCard = ({ doctorAgent }: props) => {
+const DockerAgentCard = ({ doctorAgent, onConsult }: props) => {
+  const handleClick = () => {
+    if (doctorAgent.subscriptionRequired) {
+      toast.error("This doctor is premium and service not available");
+      return;
+    }
+
+    if (onConsult) {
+      onConsult(doctorAgent);
+    }
+  };
+
   return (
     <div className="group cursor-pointer transition-all duration-300 hover:transform hover:scale-105">
       <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg border border-white/50 overflow-hidden hover:shadow-xl transition-all duration-300">
@@ -59,6 +74,7 @@ const DockerAgentCard = ({ doctorAgent }: props) => {
 
           {/* Action Button */}
           <Button
+            onClick={handleClick}
             className={`w-full rounded-full text-sm font-medium transition-all duration-300 ${
               doctorAgent.subscriptionRequired
                 ? "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
@@ -72,7 +88,8 @@ const DockerAgentCard = ({ doctorAgent }: props) => {
               </>
             ) : (
               <>
-                <AddNewSessionDialog title={"  Consult"} />
+                Consult
+                <ArrowRight className="w-3 h-3 ml-1" />
               </>
             )}
           </Button>

@@ -1,12 +1,26 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Clock, FileText, Calendar } from "lucide-react";
 import AddNewSessionDialog from "./AddNewSessionDialog";
+import axios from "axios";
+import HistoryTable from "./HistoryTable";
+import { SessionDetail } from "../medical-agent/[sessionId]/page";
 
 const HistoryList = () => {
-  const [historyList, setHistoryList] = useState([]);
+  const [historyList, setHistoryList] = useState<SessionDetail[]>([]);
+
+  const GetHistoryList = async () => {
+    const result = await axios.get("/api/session-chat?sessionId=all");
+    console.log("History List Data is : ", result.data);
+    setHistoryList(result.data);
+  };
+
+  useEffect(() => {
+    GetHistoryList();
+  }, []);
 
   return (
     <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl border border-white/20 p-6">
@@ -52,7 +66,7 @@ const HistoryList = () => {
 
           {/* Call to Action */}
           <div className="flex justify-center">
-            <AddNewSessionDialog />
+            <AddNewSessionDialog title="Start Your First Consultation" />
           </div>
 
           {/* Feature Highlights */}
@@ -92,10 +106,7 @@ const HistoryList = () => {
         </div>
       ) : (
         <div className="space-y-4">
-          {/* History items would go here */}
-          <p className="text-center text-gray-500 font-medium">
-            No history found
-          </p>
+          <HistoryTable historyList={historyList} />
         </div>
       )}
     </div>

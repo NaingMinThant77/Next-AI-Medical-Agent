@@ -1,9 +1,22 @@
+"use client";
+
 import { AIDoctorAgents } from "@/shared/list";
-import React from "react";
+import { useState } from "react";
 import { Users, Star } from "lucide-react";
-import DockerAgentCard from "./DockerAgentCard";
+import DockerAgentCard, { doctorAgent } from "./DockerAgentCard";
+import AddNewSessionDialog from "./AddNewSessionDialog";
 
 const DockerAgentList = () => {
+  const [selectedDoctor, setSelectedDoctor] = useState<doctorAgent | null>(
+    null,
+  );
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleConsult = (doctor: doctorAgent) => {
+    setSelectedDoctor(doctor);
+    setIsDialogOpen(true);
+  };
+
   return (
     <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl border border-white/20 p-6">
       {/* Header */}
@@ -55,7 +68,7 @@ const DockerAgentList = () => {
               key={index}
               className="transform transition-all duration-300 hover:scale-105"
             >
-              <DockerAgentCard doctorAgent={doctor} />
+              <DockerAgentCard doctorAgent={doctor} onConsult={handleConsult} />
             </div>
           ))}
         </div>
@@ -77,6 +90,13 @@ const DockerAgentList = () => {
           </div>
         </div>
       </div>
+
+      {/* Consultation Dialog */}
+      <AddNewSessionDialog
+        isOpen={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        preselectedDoctor={selectedDoctor}
+      />
     </div>
   );
 };

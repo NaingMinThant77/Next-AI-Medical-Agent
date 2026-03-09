@@ -17,12 +17,12 @@ const Dashboard = () => {
                 Manage your AI medical consultations
               </p>
             </div>
-            <AddNewSessionDialog />
+            <AddNewSessionDialog title="New Consultation" />
           </div>
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-7 gap-6">
+        <div className="grid md:grid-cols-1 lg:grid-cols-7 gap-6">
           {/* History Section */}
           <div className="lg:col-span-3">
             <HistoryList />

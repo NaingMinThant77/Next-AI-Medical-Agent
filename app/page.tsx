@@ -7,6 +7,8 @@ import { motion } from "motion/react";
 import Link from "next/link";
 
 export default function Home() {
+  const { user } = useUser();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <Navbar />
@@ -63,14 +65,16 @@ export default function Home() {
                   Get Started
                 </Button>
               </Link>
-              <Link href="/dashboard">
-                <Button
-                  variant="outline"
-                  className="rounded-full px-8 py-3 border-2 border-gray-300 hover:border-blue-500 transition-all duration-300"
-                >
-                  View Dashboard
-                </Button>
-              </Link>
+              {user && (
+                <Link href="/dashboard">
+                  <Button
+                    variant="outline"
+                    className="rounded-full px-8 py-3 border-2 border-gray-300 hover:border-blue-500 transition-all duration-300"
+                  >
+                    View Dashboard
+                  </Button>
+                </Link>
+              )}
             </motion.div>
           </div>
 

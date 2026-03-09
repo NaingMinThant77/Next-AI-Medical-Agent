@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { doctorAgent } from "../../_components/DockerAgentCard";
 import {
@@ -17,8 +17,9 @@ import {
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Vapi from "@vapi-ai/web";
+import { toast } from "sonner";
 
-type SessionDetail = {
+export type SessionDetail = {
   id: number;
   notes: string;
   sessionId: string;
@@ -44,6 +45,7 @@ const MedicalVoiceAgent = () => {
   const [callDuration, setCallDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (sessionId) GetSessionDetails();
@@ -161,7 +163,8 @@ const MedicalVoiceAgent = () => {
     });
   };
 
-  const endCall = () => {
+  const endCall = async () => {
+    setLoading(true);
     if (!vapiInstance) return;
     // Stop the call
     vapiInstance?.end();
@@ -174,6 +177,12 @@ const MedicalVoiceAgent = () => {
     // Reset call state
     setCallStarted(false);
     setVapiInstance(null);
+
+    const result = await GenerateReport();
+    toast.success("Your report has been generated successfully.");
+    setLoading(false);
+
+    router.replace(`/dashboard`);
   };
 
   // Format time helper
@@ -181,6 +190,17 @@ const MedicalVoiceAgent = () => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const GenerateReport = async () => {
+    const result = await axios.post("/api/medical-report/", {
+      messages: messages,
+      sessionDetail: sessionDetail,
+      sessionId: sessionId,
+    });
+
+    console.log(result.data);
+    return result.data;
   };
 
   return (
@@ -339,8 +359,18 @@ const MedicalVoiceAgent = () => {
                     size="lg"
                     className="rounded-full h-16 px-8 bg-red-500 hover:bg-red-600 shadow-lg"
                     onClick={() => endCall()}
+                    disabled={loading}
                   >
-                    <PhoneOff className="h-6 w-6 mr-2" /> End Call
+                    {loading ? (
+                      <>
+                        <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                        Disconnecting...
+                      </>
+                    ) : (
+                      <>
+                        <PhoneOff className="h-6 w-6 mr-2" /> End Call
+                      </>
+                    )}
                   </Button>
                 </>
               ) : (

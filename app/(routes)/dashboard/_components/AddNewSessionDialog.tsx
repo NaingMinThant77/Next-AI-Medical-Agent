@@ -14,16 +14,25 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
 import { ArrowRight, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { doctorAgent } from "./DockerAgentCard";
 import SuggestedDoctorCard from "./SuggestedDoctorCard";
 import { useRouter } from "next/navigation";
 
 type prop = {
   title?: string;
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  preselectedDoctor?: doctorAgent | null;
 };
 
-const AddNewSessionDialog = ({ title }: prop) => {
+const AddNewSessionDialog = ({
+  title,
+  isOpen,
+  onOpenChange,
+  preselectedDoctor,
+}: prop) => {
   const [note, setNote] = useState("");
   const [loading, setLoading] = useState(false);
   const [suggestedDoctors, setSuggestedDoctors] = useState<doctorAgent[]>();
@@ -31,15 +40,45 @@ const AddNewSessionDialog = ({ title }: prop) => {
 
   const router = useRouter();
 
+  useEffect(() => {
+    if (preselectedDoctor) {
+      setSelectedDoctor(preselectedDoctor);
+      setSuggestedDoctors([preselectedDoctor]);
+    }
+  }, [preselectedDoctor]);
+
   const OnClickNext = async () => {
+    if (!note.trim()) {
+      toast.error("Please describe your symptoms");
+      return;
+    }
+
     setLoading(true);
-    const result = await axios.post("/api/suggest-doctors", { notes: note });
-    console.log(result.data);
-    setSuggestedDoctors(result.data);
+    try {
+      const result = await axios.post("/api/suggest-doctors", { notes: note });
+      console.log("API Response:", result.data);
+
+      if (Array.isArray(result.data) && result.data.length > 0) {
+        setSuggestedDoctors(result.data);
+      } else {
+        setSuggestedDoctors([]);
+        toast.error("No doctors found. Please try different symptoms.");
+      }
+    } catch (error) {
+      console.error("Error fetching doctors:", error);
+      setSuggestedDoctors([]);
+      toast.error("Failed to get doctor recommendations");
+    }
     setLoading(false);
   };
 
   const OnStartConsultation = async () => {
+    // Check if selected doctor is premium
+    if (selectedDoctor?.subscriptionRequired) {
+      toast.error("This doctor is premium and service not available");
+      return;
+    }
+
     setLoading(true);
     const result = await axios.post("/api/session-chat", {
       notes: note,
@@ -52,15 +91,33 @@ const AddNewSessionDialog = ({ title }: prop) => {
     }
 
     setLoading(false);
+    if (onOpenChange) {
+      onOpenChange(false);
+    }
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      // Reset state when dialog closes
+      setSuggestedDoctors(undefined);
+      setSelectedDoctor(undefined);
+      setNote("");
+
+      if (onOpenChange) {
+        onOpenChange(false);
+      }
+    }
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full px-6 py-3 shadow-lg transition-all duration-300 hover:shadow-xl">
-          {title ?? "+ Start Consultation"}
-        </Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      {!isOpen && (
+        <DialogTrigger asChild>
+          <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full px-6 py-3 shadow-lg transition-all duration-300 hover:shadow-xl">
+            {title ?? "+ Start Consultation"}
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="bg-white/95 backdrop-blur-xl border border-white/20 max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-gray-900">

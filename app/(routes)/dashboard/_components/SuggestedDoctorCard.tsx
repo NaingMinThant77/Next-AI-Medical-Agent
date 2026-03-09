@@ -1,3 +1,5 @@
+"use client";
+
 import { doctorAgent } from "./DockerAgentCard";
 import Image from "next/image";
 
@@ -37,7 +39,7 @@ const SuggestedDoctorCard = ({
         )}
 
         {/* Doctor Image */}
-        <div className="relative mb-3">
+        <div className="relative mb-3 flex justify-between">
           <div
             className={`absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity`}
           />
@@ -48,6 +50,15 @@ const SuggestedDoctorCard = ({
             height={70}
             className="relative w-16 h-16 object-cover rounded-2xl border-2 border-white shadow-lg"
           />
+
+          {/* Subscription Badge */}
+          {doctorAgent?.subscriptionRequired && (
+            <div className="mt-2 flex justify-center">
+              <span className="inline-flex h-8 items-center px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+                Premium
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Doctor Info */}
@@ -57,15 +68,6 @@ const SuggestedDoctorCard = ({
         <p className="text-xs text-gray-600 line-clamp-2 text-center leading-relaxed">
           {doctorAgent?.description}
         </p>
-
-        {/* Subscription Badge */}
-        {doctorAgent?.subscriptionRequired && (
-          <div className="mt-2 flex justify-center">
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-              Premium
-            </span>
-          </div>
-        )}
       </div>
     </div>
   );
