@@ -22,14 +22,14 @@ const Dashboard = () => {
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid md:grid-cols-1 lg:grid-cols-7 gap-6">
+        <div className="grid md:grid-cols-1 lg:grid-cols-9 gap-4">
           {/* History Section */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-4">
             <HistoryList />
           </div>
 
           {/* Doctor Agents Section */}
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-5">
             <DockerAgentList />
           </div>
         </div>

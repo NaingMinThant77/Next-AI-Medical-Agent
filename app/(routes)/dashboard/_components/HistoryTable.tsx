@@ -8,8 +8,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SessionDetail } from "../medical-agent/[sessionId]/page";
-import { Button } from "@/components/ui/button";
-import moment from 'moment' // npm i moment
+import moment from "moment"; // npm i moment
+import ViewReportDialog from "./ViewReportDialog";
 
 type Props = {
   historyList: SessionDetail[];
@@ -39,9 +39,7 @@ const HistoryTable = ({ historyList }: Props) => {
                 {moment(new Date(record.createdOn)).fromNow()}
               </TableCell>
               <TableCell className="text-right">
-                <Button variant={"outline"} size={"sm"}>
-                  View Report
-                </Button>
+                <ViewReportDialog record={record} />
               </TableCell>
             </TableRow>
           ))}

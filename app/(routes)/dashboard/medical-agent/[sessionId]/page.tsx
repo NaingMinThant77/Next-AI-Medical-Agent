@@ -26,6 +26,7 @@ export type SessionDetail = {
   report: JSON;
   selectedDoctor: doctorAgent;
   createdOn: string;
+  createdBy: string;
 };
 
 type messages = {
@@ -179,6 +180,7 @@ const MedicalVoiceAgent = () => {
     setVapiInstance(null);
 
     const result = await GenerateReport();
+    console.log("Generated Report is : ", result);
     toast.success("Your report has been generated successfully.");
     setLoading(false);
 
@@ -199,7 +201,6 @@ const MedicalVoiceAgent = () => {
       sessionId: sessionId,
     });
 
-    console.log(result.data);
     return result.data;
   };
 
