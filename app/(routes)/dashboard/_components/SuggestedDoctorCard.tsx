@@ -1,6 +1,7 @@
 "use client";
 
-import { doctorAgent } from "./DockerAgentCard";
+import { useAuth } from "@clerk/nextjs";
+import { doctorAgent } from "./DocterAgentCard";
 import Image from "next/image";
 
 type props = {
@@ -15,6 +16,9 @@ const SuggestedDoctorCard = ({
   selectedDoctor,
 }: props) => {
   const isSelected = selectedDoctor?.id === doctorAgent?.id;
+
+  const { has } = useAuth();
+  const paidUser = has?.({ plan: "pro" });
 
   return (
     <div
@@ -52,7 +56,7 @@ const SuggestedDoctorCard = ({
           />
 
           {/* Subscription Badge */}
-          {doctorAgent?.subscriptionRequired && (
+          {doctorAgent?.subscriptionRequired && !paidUser && (
             <div className="mt-2 flex justify-center">
               <span className="inline-flex h-8 items-center px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500 to-pink-500 text-white">
                 Premium

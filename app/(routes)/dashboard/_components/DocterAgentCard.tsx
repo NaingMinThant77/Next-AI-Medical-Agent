@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@clerk/nextjs";
 import { ArrowRight, Star, Lock } from "lucide-react";
 import Image from "next/image";
 import React from "react";
@@ -22,8 +23,11 @@ type props = {
 };
 
 const DockerAgentCard = ({ doctorAgent, onConsult }: props) => {
+  const { has } = useAuth();
+  const paidUser = has?.({ plan: "pro" });
+
   const handleClick = () => {
-    if (doctorAgent.subscriptionRequired) {
+    if (doctorAgent.subscriptionRequired && !paidUser) {
       toast.error("This doctor is premium and service not available");
       return;
     }
@@ -48,7 +52,7 @@ const DockerAgentCard = ({ doctorAgent, onConsult }: props) => {
           />
 
           {/* Subscription Badge */}
-          {doctorAgent.subscriptionRequired && (
+          {doctorAgent.subscriptionRequired && !paidUser && (
             <div className="absolute top-2 right-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full p-1.5 shadow-lg">
               <Lock className="w-3 h-3" />
             </div>
@@ -76,12 +80,12 @@ const DockerAgentCard = ({ doctorAgent, onConsult }: props) => {
           <Button
             onClick={handleClick}
             className={`w-full rounded-full text-sm font-medium transition-all duration-300 ${
-              doctorAgent.subscriptionRequired
+              doctorAgent.subscriptionRequired && !paidUser
                 ? "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
                 : "bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white"
             }`}
           >
-            {doctorAgent.subscriptionRequired ? (
+            {doctorAgent.subscriptionRequired && !paidUser ? (
               <>
                 <Lock className="w-3 h-3 mr-1" />
                 Premium

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
 import { Button } from "@/components/ui/button";
@@ -16,9 +17,10 @@ import axios from "axios";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { doctorAgent } from "./DockerAgentCard";
+import { doctorAgent } from "./DocterAgentCard";
 import SuggestedDoctorCard from "./SuggestedDoctorCard";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 
 type prop = {
   title?: string;
@@ -39,6 +41,9 @@ const AddNewSessionDialog = ({
   const [selectedDoctor, setSelectedDoctor] = useState<doctorAgent>();
 
   const router = useRouter();
+
+  const { has } = useAuth();
+  const paidUser = has?.({ plan: "pro" });
 
   useEffect(() => {
     if (preselectedDoctor) {
@@ -74,7 +79,7 @@ const AddNewSessionDialog = ({
 
   const OnStartConsultation = async () => {
     // Check if selected doctor is premium
-    if (selectedDoctor?.subscriptionRequired) {
+    if (selectedDoctor?.subscriptionRequired && !paidUser) {
       toast.error("This doctor is premium and service not available");
       return;
     }

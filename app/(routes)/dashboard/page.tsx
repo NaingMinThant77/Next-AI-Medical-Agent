@@ -1,5 +1,5 @@
 import HistoryList from "./_components/HistoryList";
-import DockerAgentList from "./_components/DockerAgentList";
+import DockerAgentList from "./_components/DocterAgentList";
 import AddNewSessionDialog from "./_components/AddNewSessionDialog";
 
 const Dashboard = () => {

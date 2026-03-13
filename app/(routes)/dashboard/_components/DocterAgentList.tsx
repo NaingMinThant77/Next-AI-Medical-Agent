@@ -3,7 +3,7 @@
 import { AIDoctorAgents } from "@/shared/list";
 import { useState } from "react";
 import { Users, Star } from "lucide-react";
-import DockerAgentCard, { doctorAgent } from "./DockerAgentCard";
+import DockerAgentCard, { doctorAgent } from "./DocterAgentCard";
 import AddNewSessionDialog from "./AddNewSessionDialog";
 
 const DockerAgentList = () => {
