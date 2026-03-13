@@ -205,10 +205,10 @@ const MedicalVoiceAgent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-background to-purple-50 p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl border border-white/20 p-6 mb-6">
+        <div className="bg-card/80 backdrop-blur-lg rounded-3xl shadow-xl border border-border p-6 mb-6">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
               <div className={`relative ${callStarted ? "animate-pulse" : ""}`}>
@@ -224,10 +224,10 @@ const MedicalVoiceAgent = () => {
                 )}
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-foreground">
                   {callStarted ? "Connected" : "Not Connected"}
                 </h3>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   {callStarted
                     ? "Live consultation in progress"
                     : "Ready to start consultation"}
@@ -235,16 +235,16 @@ const MedicalVoiceAgent = () => {
               </div>
             </div>
             <div className="text-right">
-              <div className="text-2xl font-bold text-gray-900 font-mono">
+              <div className="text-2xl font-bold text-foreground font-mono">
                 {formatTime(callDuration)}
               </div>
-              <p className="text-xs text-gray-500">Call Duration</p>
+              <p className="text-xs text-muted-foreground">Call Duration</p>
             </div>
           </div>
         </div>
 
         {sessionDetail && (
-          <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl border border-white/20 p-8">
+          <div className="bg-card/80 backdrop-blur-lg rounded-3xl shadow-xl border border-border p-8">
             {/* Doctor Profile */}
             <div className="text-center mb-8">
               <div className="relative inline-block mb-4">
@@ -258,33 +258,35 @@ const MedicalVoiceAgent = () => {
                   alt={sessionDetail?.selectedDoctor?.specialist || ""}
                   width={120}
                   height={120}
-                  className="relative h-32 w-32 object-cover rounded-full border-4 border-white shadow-2xl"
+                  className="relative h-32 w-32 object-cover rounded-full border-4 border-background shadow-2xl"
                 />
                 {callStarted && (
                   <div className="absolute -bottom-2 -right-2 bg-green-500 rounded-full p-2 shadow-lg">
-                    <Volume2 className="h-4 w-4 animate-pulse text-white" />
+                    <Volume2 className="h-4 w-4 animate-pulse text-primary-foreground" />
                   </div>
                 )}
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-2xl font-bold text-foreground mb-2">
                 Dr. {sessionDetail?.selectedDoctor?.specialist}
               </h2>
-              <p className="text-gray-600 mb-4">AI Medical Voice Assistant</p>
+              <p className="text-muted-foreground mb-4">
+                AI Medical Voice Assistant
+              </p>
 
               {/* Status Indicators */}
               <div className="flex justify-center gap-4 mb-6">
                 <div
                   className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm ${
                     callStarted
-                      ? "bg-green-100 text-green-700"
-                      : "bg-gray-100 text-gray-600"
+                      ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                      : "bg-muted text-muted-foreground"
                   }`}
                 >
                   <Circle className="w-2 h-2 fill-current" />
                   {callStarted ? "Live" : "Offline"}
                 </div>
                 {isSpeaking && (
-                  <div className="flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+                  <div className="flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
                     <Mic className="w-3 h-3" />
                     Speaking
                   </div>
@@ -293,7 +295,7 @@ const MedicalVoiceAgent = () => {
             </div>
 
             {/* Conversation Area */}
-            <div className="bg-gray-50/50 rounded-2xl p-6 mb-6 min-h-[300px] max-h-[400px] overflow-y-auto">
+            <div className="bg-muted/50 rounded-2xl p-6 mb-6 min-h-[300px] max-h-[400px] overflow-y-auto">
               <div className="space-y-4">
                 {messages?.slice(-4).map((msg, index) => (
                   <div
@@ -303,8 +305,8 @@ const MedicalVoiceAgent = () => {
                     <div
                       className={`max-w-[80%] px-4 py-3 rounded-2xl ${
                         msg.role === "user"
-                          ? "bg-blue-500 text-white rounded-br-sm"
-                          : "bg-white text-gray-800 rounded-bl-sm shadow-sm border border-gray-100"
+                          ? "bg-primary text-primary-foreground rounded-br-sm"
+                          : "bg-card text-foreground rounded-bl-sm shadow-sm border border-border"
                       }`}
                     >
                       <p className="text-sm">{msg.text}</p>
@@ -320,8 +322,8 @@ const MedicalVoiceAgent = () => {
                     <div
                       className={`max-w-[80%] px-4 py-3 rounded-2xl ${
                         currentRoll === "user"
-                          ? "bg-blue-500/30 text-blue-700 rounded-br-sm border border-blue-200"
-                          : "bg-gray-100 text-gray-600 rounded-bl-sm animate-pulse"
+                          ? "bg-primary/30 text-primary rounded-br-sm border border-primary/20"
+                          : "bg-muted text-muted-foreground rounded-bl-sm animate-pulse"
                       }`}
                     >
                       <div className="flex items-center gap-2">

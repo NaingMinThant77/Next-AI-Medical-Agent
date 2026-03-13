@@ -78,21 +78,21 @@ const History = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-background to-purple-50 px-4 py-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="text-3xl font-bold text-foreground mb-2">
                 Consultation History
               </h1>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 Track your AI medical consultations and health journey
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <div className="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg flex items-center gap-2">
+              <div className="bg-primary/10 text-primary px-4 py-2 rounded-lg flex items-center gap-2">
                 <TrendingUp className="w-4 h-4" />
                 <span className="font-medium">{historyList.length} Total</span>
               </div>
@@ -103,20 +103,20 @@ const History = () => {
           {/* Search and Filters */}
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
               <Input
                 placeholder="Search by symptoms, specialist, or notes..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-white/80 backdrop-blur-lg border-white/20"
+                className="pl-10 bg-card/80 backdrop-blur-lg border-border"
               />
             </div>
             <div className="flex items-center gap-2">
-              <Filter className="w-5 h-5 text-gray-500" />
+              <Filter className="w-5 h-5 text-muted-foreground" />
               <select
                 value={filterSpecialist}
                 onChange={(e) => setFilterSpecialist(e.target.value)}
-                className="px-4 py-2 bg-white/80 backdrop-blur-lg border border-white/20 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-4 py-2 bg-card/80 backdrop-blur-lg border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="all">All Specialists</option>
                 {specialists.map((specialist) => (
@@ -139,27 +139,29 @@ const History = () => {
               return (
                 <div
                   key={index}
-                  className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg border border-white/20 hover:shadow-xl transition-all duration-300 hover:scale-105"
+                  className="bg-card/80 backdrop-blur-lg rounded-2xl shadow-lg border border-border hover:shadow-xl transition-all duration-300 hover:scale-105"
                 >
                   {/* Card Header */}
-                  <div className="p-6 border-b border-gray-100">
+                  <div className="p-6 border-b border-border">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                          <Stethoscope className="w-6 h-6 text-white" />
+                          <Stethoscope className="w-6 h-6 text-primary-foreground" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-gray-900">
+                          <h3 className="font-semibold text-foreground">
                             {record.selectedDoctor.specialist}
                           </h3>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-muted-foreground">
                             {record.selectedDoctor.description}
                           </p>
                         </div>
                       </div>
                       {report?.severity && (
                         <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium border ${getSeverityColor(report.severity)}`}
+                          className={`px-2 py-1 rounded-full text-xs font-medium border ${getSeverityColor(
+                            report.severity,
+                          )}`}
                         >
                           {report.severity}
                         </span>
@@ -167,7 +169,7 @@ const History = () => {
                     </div>
 
                     {/* Date and User */}
-                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
                         <span>
@@ -189,16 +191,16 @@ const History = () => {
                   <div className="p-6">
                     {/* Chief Complaint */}
                     <div className="mb-4 flex justify-between">
-                      <h4 className="font-medium text-gray-900 mb-2">
+                      <h4 className="font-medium text-foreground mb-2">
                         Description
                       </h4>
-                      <p className="text-gray-600 text-sm line-clamp-2">
+                      <p className="text-muted-foreground text-sm line-clamp-2">
                         {record?.notes || "No description provided"}
                       </p>
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center gap-2 pt-4 border-t border-gray-100">
+                    <div className="flex items-center gap-2 pt-4 border-t border-border">
                       <ViewReportDialog record={record} />
                     </div>
                   </div>
@@ -211,40 +213,44 @@ const History = () => {
         {/* Stats Section */}
         {historyList.length > 0 && (
           <div className="mt-12 grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white/80 backdrop-blur-lg rounded-xl p-4 border border-white/20">
+            <div className="bg-card/80 backdrop-blur-lg rounded-xl p-4 border border-border">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                  <FileText className="w-5 h-5 text-blue-600" />
+                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Total Consultations</p>
-                  <p className="text-xl font-bold text-gray-900">
+                  <p className="text-sm text-muted-foreground">
+                    Total Consultations
+                  </p>
+                  <p className="text-xl font-bold text-foreground">
                     {historyList.length}
                   </p>
                 </div>
               </div>
             </div>
-            <div className="bg-white/80 backdrop-blur-lg rounded-xl p-4 border border-white/20">
+            <div className="bg-card/80 backdrop-blur-lg rounded-xl p-4 border border-border">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                  <Stethoscope className="w-5 h-5 text-purple-600" />
+                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                  <Stethoscope className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Specialists Seen</p>
-                  <p className="text-xl font-bold text-gray-900">
+                  <p className="text-sm text-muted-foreground">
+                    Specialists Seen
+                  </p>
+                  <p className="text-xl font-bold text-foreground">
                     {specialists.length}
                   </p>
                 </div>
               </div>
             </div>
-            <div className="bg-white/80 backdrop-blur-lg rounded-xl p-4 border border-white/20">
+            <div className="bg-card/80 backdrop-blur-lg rounded-xl p-4 border border-border">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-green-600" />
+                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">This Month</p>
-                  <p className="text-xl font-bold text-gray-900">
+                  <p className="text-sm text-muted-foreground">This Month</p>
+                  <p className="text-xl font-bold text-foreground">
                     {
                       historyList.filter((record) =>
                         moment(new Date(record.createdOn)).isSame(
@@ -257,14 +263,14 @@ const History = () => {
                 </div>
               </div>
             </div>
-            <div className="bg-white/80 backdrop-blur-lg rounded-xl p-4 border border-white/20">
+            <div className="bg-card/80 backdrop-blur-lg rounded-xl p-4 border border-border">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-orange-600" />
+                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Health Score</p>
-                  <p className="text-xl font-bold text-gray-900">Good</p>
+                  <p className="text-sm text-muted-foreground">Health Score</p>
+                  <p className="text-xl font-bold text-foreground">Good</p>
                 </div>
               </div>
             </div>

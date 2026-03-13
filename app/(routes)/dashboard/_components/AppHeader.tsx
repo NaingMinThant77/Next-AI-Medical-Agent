@@ -3,8 +3,18 @@
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Clock, CreditCard, User, Menu, X } from "lucide-react";
+import {
+  Home,
+  Clock,
+  CreditCard,
+  User,
+  Menu,
+  X,
+  Moon,
+  Sun,
+} from "lucide-react";
 import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 
 const menuOptions = [
   { id: 1, name: "Home", path: "/dashboard", icon: Home },
@@ -15,11 +25,16 @@ const menuOptions = [
 const AppHeader = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
   const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   const isActive = (path: string) => {
     if (!mounted) return false;
@@ -30,7 +45,7 @@ const AppHeader = () => {
   };
 
   return (
-    <header className="bg-white/80 backdrop-blur-lg border-b border-white/20 sticky top-0 z-50 shadow-sm">
+    <header className="bg-background/80 backdrop-blur-lg border-b border-border sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -55,12 +70,12 @@ const AppHeader = () => {
                   href={option.path}
                   className={`flex items-center gap-2 font-medium transition-all duration-300 hover:scale-105 group ${
                     active
-                      ? "text-blue-600 bg-blue-50 px-3 py-2 rounded-lg"
-                      : "text-gray-600 hover:text-blue-600"
+                      ? "text-primary bg-primary/10 px-3 py-2 rounded-lg"
+                      : "text-muted-foreground hover:text-primary"
                   }`}
                 >
                   <Icon
-                    className={`w-4 h-4 transition-transform ${active ? "text-blue-600" : "group-hover:scale-110"}`}
+                    className={`w-4 h-4 transition-transform ${active ? "text-primary" : "group-hover:scale-110"}`}
                   />
                   <span>{option.name}</span>
                 </Link>
@@ -70,17 +85,31 @@ const AppHeader = () => {
 
           {/* User Section */}
           <div className="flex items-center gap-4">
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg hover:bg-accent transition-all duration-300"
+              aria-label="Toggle theme"
+            >
+              {mounted &&
+                (theme === "dark" ? (
+                  <Sun className="w-5 h-5 text-primary" />
+                ) : (
+                  <Moon className="w-5 h-5 text-muted-foreground" />
+                ))}
+            </button>
+
             <UserButton />
 
             {/* Mobile Menu Button */}
             <button
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="md:hidden p-2 rounded-lg hover:bg-accent transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? (
-                <X className="w-5 h-5 text-gray-600" />
+                <X className="w-5 h-5 text-muted-foreground" />
               ) : (
-                <Menu className="w-5 h-5 text-gray-600" />
+                <Menu className="w-5 h-5 text-muted-foreground" />
               )}
             </button>
           </div>
@@ -88,7 +117,7 @@ const AppHeader = () => {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
+          <div className="md:hidden py-4 border-t border-border">
             <nav className="flex flex-col gap-2">
               {menuOptions.map((option) => {
                 const Icon = option.icon;
@@ -99,8 +128,8 @@ const AppHeader = () => {
                     href={option.path}
                     className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 ${
                       active
-                        ? "text-blue-600 bg-blue-50"
-                        : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                        ? "text-primary bg-primary/10"
+                        : "text-muted-foreground hover:text-primary hover:bg-accent"
                     }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
