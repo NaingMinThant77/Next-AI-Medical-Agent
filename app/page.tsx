@@ -63,7 +63,7 @@ export default function Home() {
               transition={{ duration: 0.3, delay: 1 }}
               className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4"
             >
-              <Link href="/sign-in">
+              <Link href="/">
                 <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full px-8 py-3 shadow-lg transition-all duration-300 hover:shadow-xl transform hover:-translate-y-0.5">
                   Get Started
                 </Button>

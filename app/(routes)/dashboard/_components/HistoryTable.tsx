@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -19,7 +18,6 @@ const HistoryTable = ({ historyList }: Props) => {
   return (
     <div>
       <Table>
-        <TableCaption>Previous Consultation Reports</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>AI Medical Specialist</TableHead>
@@ -34,7 +32,7 @@ const HistoryTable = ({ historyList }: Props) => {
               <TableCell className="font-medium">
                 {record.selectedDoctor.specialist}
               </TableCell>
-              <TableCell>{record.notes}</TableCell>
+              <TableCell>{record.notes || "No Desctiption"}</TableCell>
               <TableCell>
                 {moment(new Date(record.createdOn)).fromNow()}
               </TableCell>

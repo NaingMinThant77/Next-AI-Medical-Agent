@@ -199,7 +199,7 @@ const ViewReportDialog = ({ record }: props) => {
                 Conversation Preview
               </h3>
               <div className="space-y-3 max-h-60 overflow-y-auto">
-                {conversation.slice(0, 6).map((msg: any, index: number) => (
+                {conversation.map((msg: any, index: number) => (
                   <div
                     key={index}
                     className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
@@ -215,11 +215,6 @@ const ViewReportDialog = ({ record }: props) => {
                     </div>
                   </div>
                 ))}
-                {conversation.length > 6 && (
-                  <div className="text-center text-muted-foreground text-sm">
-                    ... and {conversation.length - 6} more messages
-                  </div>
-                )}
               </div>
             </div>
           )}
