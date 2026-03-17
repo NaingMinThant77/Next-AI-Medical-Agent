@@ -4,7 +4,7 @@ import AddNewSessionDialog from "./_components/AddNewSessionDialog";
 
 const Dashboard = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-background to-purple-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-background to-purple-50 dark:bg-gradient-to-br darK:from-blue-900 dark:via-black dark:to-blue-800 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="bg-card/80 backdrop-blur-lg rounded-3xl shadow-xl border border-border p-6 mb-6">

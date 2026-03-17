@@ -18,10 +18,10 @@ const NoRecentConsultation = () => {
       </div>
 
       {/* Empty State Text */}
-      <h3 className="text-xl font-bold text-gray-900 mb-2">
+      <h3 className="text-xl font-bold text-foreground mb-2">
         No Recent Consultations
       </h3>
-      <p className="text-gray-600 mb-6 max-w-md mx-auto">
+      <p className="text-muted-foreground mb-6 max-w-md mx-auto">
         Start your first AI medical consultation to get personalized health
         advice and recommendations
       </p>
@@ -33,28 +33,32 @@ const NoRecentConsultation = () => {
 
       {/* Feature Highlights */}
       <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
-        <div className="bg-gray-50/50 rounded-2xl p-4 text-center">
-          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-            <Clock className="w-6 h-6 text-blue-600" />
+        <div className="bg-muted/50 rounded-2xl p-4 text-center">
+          <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+            <Clock className="w-6 h-6 text-primary" />
           </div>
-          <h4 className="font-semibold text-gray-900 mb-1">24/7 Available</h4>
-          <p className="text-sm text-gray-600">Get medical advice anytime</p>
+          <h4 className="font-semibold text-foreground mb-1">24/7 Available</h4>
+          <p className="text-sm text-muted-foreground">
+            Get medical advice anytime
+          </p>
         </div>
-        <div className="bg-gray-50/50 rounded-2xl p-4 text-center">
-          <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+        <div className="bg-muted/50 rounded-2xl p-4 text-center">
+          <div className="w-12 h-12 bg-purple-100/30 rounded-full flex items-center justify-center mx-auto mb-3">
             <FileText className="w-6 h-6 text-purple-600" />
           </div>
-          <h4 className="font-semibold text-gray-900 mb-1">AI-Powered</h4>
-          <p className="text-sm text-gray-600">
+          <h4 className="font-semibold text-foreground mb-1">AI-Powered</h4>
+          <p className="text-sm text-muted-foreground">
             Advanced medical AI assistance
           </p>
         </div>
-        <div className="bg-gray-50/50 rounded-2xl p-4 text-center">
-          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+        <div className="bg-muted/50 rounded-2xl p-4 text-center">
+          <div className="w-12 h-12 bg-green-100/30 rounded-full flex items-center justify-center mx-auto mb-3">
             <Calendar className="w-6 h-6 text-green-600" />
           </div>
-          <h4 className="font-semibold text-gray-900 mb-1">Track History</h4>
-          <p className="text-sm text-gray-600">Monitor your health journey</p>
+          <h4 className="font-semibold text-foreground mb-1">Track History</h4>
+          <p className="text-sm text-muted-foreground">
+            Monitor your health journey
+          </p>
         </div>
       </div>
     </div>

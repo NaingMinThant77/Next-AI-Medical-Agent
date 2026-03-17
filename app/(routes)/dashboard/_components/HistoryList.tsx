@@ -25,18 +25,18 @@ const HistoryList = () => {
   }, [GetHistoryList]);
 
   return (
-    <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl border border-white/20 p-6">
+    <div className="bg-card/80 backdrop-blur-lg rounded-3xl shadow-xl border border-border p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-1">
+          <h2 className="text-2xl font-bold text-foreground mb-1">
             Consultation History
           </h2>
-          <p className="text-gray-600 text-sm">
+          <p className="text-muted-foreground text-sm">
             Your past AI medical consultations
           </p>
         </div>
-        <div className="flex items-center gap-2 text-gray-500">
+        <div className="flex items-center gap-2 text-muted-foreground">
           <Calendar className="w-4 h-4" />
           <span className="text-sm">Last 30 days</span>
         </div>

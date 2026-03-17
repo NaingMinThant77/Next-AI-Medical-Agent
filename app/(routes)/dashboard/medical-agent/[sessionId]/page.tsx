@@ -4,7 +4,7 @@
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { doctorAgent } from "../../_components/DockerAgentCard";
+
 import {
   Circle,
   PhoneCall,
@@ -18,6 +18,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Vapi from "@vapi-ai/web";
 import { toast } from "sonner";
+import { doctorAgent } from "../../_components/DocterAgentCard";
 
 export type SessionDetail = {
   id: number;

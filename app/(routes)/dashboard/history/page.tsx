@@ -78,7 +78,7 @@ const History = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-background to-purple-50 px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-250 via-background to-purple-250 dark:bg-gradient-to-br darK:from-blue-900 dark:via-black dark:to-blue-800 px-4 py-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">

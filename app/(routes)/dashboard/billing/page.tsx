@@ -4,7 +4,7 @@ import { Crown, Zap, Shield, Star, Check } from "lucide-react";
 
 const Billing = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-background to-purple-50 px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-background to-purple-50 dark:bg-gradient-to-br darK:from-blue-900 dark:via-black dark:to-blue-800 px-4 py-8">
       <div className="max-w-5xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-12">

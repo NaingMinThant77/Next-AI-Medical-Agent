@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@clerk/nextjs";
 import { ArrowRight, Star, Lock } from "lucide-react";
 import Image from "next/image";
-import React from "react";
 import { toast } from "sonner";
 
 export type doctorAgent = {
@@ -39,7 +38,7 @@ const DockerAgentCard = ({ doctorAgent, onConsult }: props) => {
 
   return (
     <div className="group cursor-pointer transition-all duration-300 hover:transform hover:scale-105">
-      <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg border border-white/50 overflow-hidden hover:shadow-xl transition-all duration-300">
+      <div className="bg-card/80 backdrop-blur-lg rounded-2xl shadow-lg border border-border overflow-hidden hover:shadow-xl transition-all duration-300">
         {/* Image Container */}
         <div className="relative h-40 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
@@ -59,7 +58,7 @@ const DockerAgentCard = ({ doctorAgent, onConsult }: props) => {
           )}
 
           {/* Rating Badge */}
-          <div className="absolute top-2 left-2 bg-white/90 backdrop-blur rounded-full px-2 py-1 shadow-lg">
+          <div className="absolute top-2 left-2 bg-background/90 backdrop-blur rounded-full px-2 py-1 shadow-lg">
             <div className="flex items-center gap-1">
               <Star className="w-3 h-3 text-yellow-500 fill-current" />
               <span className="text-xs font-medium">4.8</span>
@@ -69,10 +68,10 @@ const DockerAgentCard = ({ doctorAgent, onConsult }: props) => {
 
         {/* Content */}
         <div className="p-4">
-          <h3 className="line-clamp-1 font-bold text-gray-900 mb-1 text-sm group-hover:text-blue-600 transition-colors">
+          <h3 className="line-clamp-1 font-bold text-foreground mb-1 text-sm group-hover:text-primary transition-colors">
             {doctorAgent.specialist}
           </h3>
-          <p className="line-clamp-2 text-xs text-gray-600 mb-3 leading-relaxed">
+          <p className="line-clamp-2 text-xs text-muted-foreground mb-3 leading-relaxed">
             {doctorAgent.description}
           </p>
 

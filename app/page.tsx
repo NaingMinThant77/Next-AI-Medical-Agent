@@ -5,12 +5,15 @@ import { Button } from "@/components/ui/button";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { motion } from "motion/react";
 import Link from "next/link";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const { user } = useUser();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-background to-purple-50">
       <Navbar />
       <div className="relative flex max-w-full flex-col items-center justify-center px-4 py-10 md:py-20">
         {/* Decorative Background Elements */}
@@ -23,7 +26,7 @@ export default function Home() {
         {/* Hero Content */}
         <div className="relative z-10 w-full max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="relative z-10 mx-auto max-w-4xl text-center text-3xl font-bold text-gray-900 md:text-5xl lg:text-7xl mb-6">
+            <h1 className="relative z-10 mx-auto max-w-4xl text-center text-3xl font-bold text-foreground md:text-5xl lg:text-7xl mb-6">
               {"🩺Revolutionize Patient Care with AI Voice Agent"
                 .split(" ")
                 .map((word, index) => (
@@ -47,7 +50,7 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3, delay: 0.8 }}
-              className="relative z-10 mx-auto max-w-2xl py-4 text-center text-lg font-normal text-gray-600 leading-relaxed"
+              className="relative z-10 mx-auto max-w-2xl py-4 text-center text-lg font-normal text-muted-foreground leading-relaxed"
             >
               Deliver instant, accurate medical assistance through natural voice
               conversation. Automate appointment scheduling, symptoms tracking,
@@ -69,7 +72,7 @@ export default function Home() {
                 <Link href="/dashboard">
                   <Button
                     variant="outline"
-                    className="rounded-full px-8 py-3 border-2 border-gray-300 hover:border-blue-500 transition-all duration-300"
+                    className="rounded-full px-8 py-3 border-2 border-border hover:border-primary transition-all duration-300"
                   >
                     View Dashboard
                   </Button>
@@ -85,16 +88,16 @@ export default function Home() {
             transition={{ duration: 0.3, delay: 1.2 }}
             className="relative z-10 mt-16"
           >
-            <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8">
+            <div className="bg-card/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-border p-8">
               <div className="mb-4">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3 className="text-xl font-semibold text-foreground mb-2">
                   Experience the Future of Healthcare
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-muted-foreground">
                   AI-powered medical consultations at your fingertips
                 </p>
               </div>
-              <div className="w-full overflow-hidden rounded-2xl border border-gray-200 shadow-inner">
+              <div className="w-full overflow-hidden rounded-2xl border border-border shadow-inner">
                 <img
                   src="MediVoiceAI.jpeg"
                   alt="Landing page preview"
@@ -113,8 +116,19 @@ export default function Home() {
 
 const Navbar = () => {
   const { user } = useUser();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
   return (
-    <nav className="bg-white/80 backdrop-blur-lg border-b border-white/20 px-6 py-4 sticky top-0 z-50 shadow-sm">
+    <nav className="bg-card/80 backdrop-blur-lg border-b border-border px-6 py-4 sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="relative">
@@ -126,23 +140,38 @@ const Navbar = () => {
           </h1>
         </div>
 
-        {!user ? (
-          <Link href="/sign-in">
-            <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full px-6 py-2 shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5">
-              Login
-            </Button>
-          </Link>
-        ) : (
-          <div className="flex items-center gap-3">
-            <UserButton />
-            <Button
-              asChild
-              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full px-6 py-2 shadow-md transition-all duration-300 hover:shadow-lg"
+        <div className="flex items-center gap-3">
+          {mounted && (
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-full hover:bg-accent transition-colors"
+              aria-label="Toggle theme"
             >
-              <Link href="/dashboard">Dashboard</Link>
-            </Button>
-          </div>
-        )}
+              {theme === "dark" ? (
+                <Sun className="w-5 h-5 text-foreground" />
+              ) : (
+                <Moon className="w-5 h-5 text-foreground" />
+              )}
+            </button>
+          )}
+          {!user ? (
+            <Link href="/sign-in">
+              <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full px-6 py-2 shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5">
+                Login
+              </Button>
+            </Link>
+          ) : (
+            <div className="flex items-center gap-3">
+              <UserButton />
+              <Button
+                asChild
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full px-6 py-2 shadow-md transition-all duration-300 hover:shadow-lg"
+              >
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );
