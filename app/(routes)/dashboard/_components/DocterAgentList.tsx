@@ -93,6 +93,7 @@ const DockerAgentList = () => {
 
       {/* Consultation Dialog */}
       <AddNewSessionDialog
+        isShow={true}
         isOpen={isDialogOpen}
         onOpenChange={setIsDialogOpen}
         preselectedDoctor={selectedDoctor}

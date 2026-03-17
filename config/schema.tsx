@@ -5,6 +5,8 @@ export const usersTable = pgTable("users", {
   name: varchar({ length: 255 }).notNull(),
   email: varchar({ length: 255 }).notNull().unique(),
   credits: integer(),
+  clerkUserId: varchar({ length: 255 }), // Make optional for migration
+  subscription: varchar({ length: 50 }).default("free"),
 });
 
 export const SessionChatTable = pgTable("sessionChatTable", {

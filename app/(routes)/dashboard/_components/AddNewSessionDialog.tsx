@@ -25,6 +25,7 @@ import { useAuth } from "@clerk/nextjs";
 type prop = {
   title?: string;
   isOpen?: boolean;
+  isShow?: boolean;
   onOpenChange?: (open: boolean) => void;
   preselectedDoctor?: doctorAgent | null;
 };
@@ -32,6 +33,7 @@ type prop = {
 const AddNewSessionDialog = ({
   title,
   isOpen,
+  isShow,
   onOpenChange,
   preselectedDoctor,
 }: prop) => {
@@ -118,9 +120,11 @@ const AddNewSessionDialog = ({
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       {!isOpen && (
         <DialogTrigger asChild>
-          <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full px-6 py-3 shadow-lg transition-all duration-300 hover:shadow-xl">
-            {title ?? "+ Start Consultation"}
-          </Button>
+          {!isShow && (
+            <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full px-6 py-3 shadow-lg transition-all duration-300 hover:shadow-xl">
+              {title ?? "+ Start Consultation"}
+            </Button>
+          )}
         </DialogTrigger>
       )}
       <DialogContent className="bg-background/95 backdrop-blur-xl border border-border max-w-2xl max-h-[80vh] overflow-y-auto">

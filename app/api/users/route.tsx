@@ -9,31 +9,113 @@ export async function POST(req: NextRequest) {
   const user = await currentUser();
 
   try {
-    // Check if User Already Exists
-    const users = await db
-      .select()
-      .from(usersTable)
-      // @ts-ignore
-      .where(eq(usersTable.email, user?.primaryEmailAddress?.emailAddress));
-
-    // If Not Then Create New User
-    if (users.length == 0) {
-      const result = await db
-        .insert(usersTable)
-        .values({
-          // @ts-ignore
-          name: user?.fullName,
-          email: user?.primaryEmailAddress?.emailAddress,
-          credits: 10,
-        })
-        // @ts-ignore
-        .returning({ usersTable });
-
-      return NextResponse.json(result[0].usersTable);
+    if (!user?.id || !user?.primaryEmailAddress?.emailAddress) {
+      return NextResponse.json(
+        { error: "User not authenticated or missing email" },
+        { status: 401 },
+      );
     }
 
-    return NextResponse.json(users[0]);
+    const userEmail = user.primaryEmailAddress.emailAddress;
+    const clerkUserId = user.id;
+
+    // First check if user exists by email (for backward compatibility)
+    const emailUsers = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.email, userEmail));
+
+    if (emailUsers.length > 0) {
+      const existingUser = emailUsers[0];
+
+      // If user exists but doesn't have clerkUserId, update it
+      if (!existingUser.clerkUserId) {
+        await db
+          .update(usersTable)
+          .set({
+            clerkUserId: clerkUserId,
+            subscription: "free", // Reset to free for existing users
+          })
+          .where(eq(usersTable.email, userEmail));
+
+        return NextResponse.json({
+          ...existingUser,
+          clerkUserId: clerkUserId,
+          subscription: "free",
+        });
+      }
+
+      // If user has different clerkUserId (email change scenario)
+      if (existingUser.clerkUserId !== clerkUserId) {
+        await db
+          .update(usersTable)
+          .set({
+            clerkUserId: clerkUserId,
+            subscription: "free", // Reset to free when email changes
+          })
+          .where(eq(usersTable.email, userEmail));
+
+        return NextResponse.json({
+          ...existingUser,
+          clerkUserId: clerkUserId,
+          subscription: "free",
+        });
+      }
+
+      return NextResponse.json(existingUser);
+    }
+
+    // Check if user exists by clerkUserId
+    const clerkUsers = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.clerkUserId, clerkUserId));
+
+    if (clerkUsers.length > 0) {
+      // Update email if it changed
+      const existingUser = clerkUsers[0];
+      if (existingUser.email !== userEmail) {
+        await db
+          .update(usersTable)
+          .set({
+            email: userEmail,
+            name: user?.fullName || existingUser.name,
+            subscription: "free", // Reset to free when email changes
+          })
+          .where(eq(usersTable.clerkUserId, clerkUserId));
+
+        return NextResponse.json({
+          ...existingUser,
+          email: userEmail,
+          name: user?.fullName || existingUser.name,
+          subscription: "free",
+        });
+      }
+
+      return NextResponse.json(existingUser);
+    }
+
+    // Create new user
+    const result = await db
+      .insert(usersTable)
+      .values({
+        name: user?.fullName || "User",
+        email: userEmail,
+        credits: 10,
+        clerkUserId: clerkUserId,
+        subscription: "free",
+      })
+      .returning();
+
+    return NextResponse.json(result[0]);
   } catch (error) {
-    return NextResponse.json(error);
+    console.error("Error in users API:", error);
+    return NextResponse.json(
+      {
+        error: "Internal server error",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 },
+    );
   }
 }
