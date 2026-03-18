@@ -17,10 +17,12 @@ import axios from "axios";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { doctorAgent } from "./DocterAgentCard";
+import { doctorAgent } from "./DoctorAgentCard";
 import SuggestedDoctorCard from "./SuggestedDoctorCard";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
+import { UserDetailContext } from "@/context/UserDetailContext";
+import { useContext } from "react";
 
 type prop = {
   title?: string;
@@ -37,15 +39,17 @@ const AddNewSessionDialog = ({
   onOpenChange,
   preselectedDoctor,
 }: prop) => {
-  const [note, setNote] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [suggestedDoctors, setSuggestedDoctors] = useState<doctorAgent[]>();
-  const [selectedDoctor, setSelectedDoctor] = useState<doctorAgent>();
-
-  const router = useRouter();
-
   const { has } = useAuth();
   const paidUser = has?.({ plan: "pro" });
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [suggestedDoctors, setSuggestedDoctors] = useState<any[]>();
+  const [note, setNote] = useState("");
+  const [selectedDoctor, setSelectedDoctor] = useState<doctorAgent | null>(
+    preselectedDoctor || null,
+  );
+  const userContext = useContext(UserDetailContext);
+  const { setUserDetail, userDetail: currentUser } = userContext || {};
 
   useEffect(() => {
     if (preselectedDoctor) {
@@ -63,7 +67,6 @@ const AddNewSessionDialog = ({
     setLoading(true);
     try {
       const result = await axios.post("/api/suggest-doctors", { notes: note });
-      console.log("API Response:", result.data);
 
       if (Array.isArray(result.data) && result.data.length > 0) {
         setSuggestedDoctors(result.data);
@@ -80,21 +83,45 @@ const AddNewSessionDialog = ({
   };
 
   const OnStartConsultation = async () => {
+    // Get current user details from context
+    const userDetailResponse = await axios.get("/api/users");
+    const currentUser = userDetailResponse.data;
+
     // Check if selected doctor is premium
     if (selectedDoctor?.subscriptionRequired && !paidUser) {
       toast.error("This doctor is premium and service not available");
       return;
     }
 
+    // Check credits for free users
+    if (!paidUser && currentUser.credits <= 0) {
+      toast.error(
+        "Free plan is complete. Buy pro version for unlimited consultations or create a new account for more credits.",
+      );
+      return;
+    }
+
     setLoading(true);
-    const result = await axios.post("/api/session-chat", {
-      notes: note,
-      selectedDoctor: selectedDoctor,
-    });
-    console.log(result.data);
-    if (result.data.sessionId) {
-      console.log(result.data.sessionId);
-      router.push(`/dashboard/medical-agent/${result.data.sessionId}`);
+    try {
+      const result = await axios.post("/api/session-chat", {
+        notes: note,
+        selectedDoctor: selectedDoctor,
+      });
+
+      if (result.data.sessionId) {
+        // Update user credits locally (optimistic update)
+        if (!paidUser && currentUser.credits > 0) {
+          setUserDetail({
+            ...currentUser,
+            credits: currentUser.credits - 1,
+          });
+        }
+
+        router.push(`/dashboard/medical-agent/${result.data.sessionId}`);
+      }
+    } catch (error) {
+      console.error("Error starting consultation:", error);
+      toast.error("Failed to start consultation. Please try again.");
     }
 
     setLoading(false);
@@ -107,7 +134,7 @@ const AddNewSessionDialog = ({
     if (!open) {
       // Reset state when dialog closes
       setSuggestedDoctors(undefined);
-      setSelectedDoctor(undefined);
+      setSelectedDoctor(null);
       setNote("");
 
       if (onOpenChange) {
@@ -123,6 +150,11 @@ const AddNewSessionDialog = ({
           {!isShow && (
             <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full px-6 py-3 shadow-lg transition-all duration-300 hover:shadow-xl">
               {title ?? "+ Start Consultation"}
+              {!paidUser && currentUser && (
+                <span className="ml-2 text-xs bg-white/20 px-2 py-1 rounded-full">
+                  {currentUser.credits || 0} credits
+                </span>
+              )}
             </Button>
           )}
         </DialogTrigger>

@@ -29,8 +29,6 @@ export async function POST(req: NextRequest) {
       .replace(/```json\n?/g, "")
       .replace(/```\n?/g, "");
 
-    console.log("Cleaned response:", Resp);
-
     let JSONResp;
     try {
       JSONResp = JSON.parse(Resp);

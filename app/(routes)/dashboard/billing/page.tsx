@@ -1,8 +1,36 @@
+"use client";
 import { PricingTable } from "@clerk/nextjs";
-import React from "react";
 import { Crown, Zap, Shield, Star, Check } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
+import { useEffect } from "react";
 
 const Billing = () => {
+  const { has } = useAuth();
+  const paidUser = has?.({ plan: "pro" });
+
+  useEffect(() => {
+    const updateSubscription = async () => {
+      try {
+        const subscription = paidUser ? "pro" : "free";
+        const response = await fetch("/api/users/subscription", {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ subscription }),
+        });
+
+        if (!response.ok) {
+          console.error("Failed to update subscription");
+        }
+      } catch (error) {
+        console.error("Error updating subscription:", error);
+      }
+    };
+
+    updateSubscription();
+  }, [paidUser]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-background to-purple-50 dark:bg-gradient-to-br darK:from-blue-900 dark:via-black dark:to-blue-800 px-4 py-8">
       <div className="max-w-5xl mx-auto">

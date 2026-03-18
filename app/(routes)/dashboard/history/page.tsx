@@ -17,20 +17,31 @@ import moment from "moment";
 import { Input } from "@/components/ui/input";
 import ViewReportDialog from "../_components/ViewReportDialog";
 import NoRecentConsultation from "../_components/NoRecentConsultation";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const History = () => {
   const [historyList, setHistoryList] = useState<SessionDetail[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterSpecialist, setFilterSpecialist] = useState("all");
+  const [loading, setLoading] = useState(false);
 
   const GetHistoryList = useMemo(
     () => async () => {
       try {
+        setLoading(true);
         const result = await axios.get("/api/session-chat?sessionId=all");
-        console.log("History List Data is : ", result.data);
         setHistoryList(result.data);
       } catch (error) {
         console.error("Error fetching history:", error);
+      } finally {
+        setLoading(false);
       }
     },
     [],
@@ -113,25 +124,35 @@ const History = () => {
             </div>
             <div className="flex items-center gap-2">
               <Filter className="w-5 h-5 text-muted-foreground" />
-              <select
+              <Select
                 value={filterSpecialist}
-                onChange={(e) => setFilterSpecialist(e.target.value)}
-                className="px-4 py-2 bg-card/80 backdrop-blur-lg border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                onValueChange={setFilterSpecialist}
               >
-                <option value="all">All Specialists</option>
-                {specialists.map((specialist) => (
-                  <option key={specialist} value={specialist}>
-                    {specialist}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="All Specialists" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="all">All Specialists</SelectItem>
+                    {specialists.map((specialist) => (
+                      <SelectItem key={specialist} value={specialist}>
+                        {specialist}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>
 
         {/* Content */}
-        {filteredHistory.length === 0 ? (
+        {filteredHistory.length === 0 && !loading ? (
           <NoRecentConsultation />
+        ) : loading ? (
+          <div className="flex justify-center items-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredHistory.map((record: SessionDetail, index: number) => {

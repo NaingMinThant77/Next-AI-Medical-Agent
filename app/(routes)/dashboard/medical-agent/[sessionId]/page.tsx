@@ -18,7 +18,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Vapi from "@vapi-ai/web";
 import { toast } from "sonner";
-import { doctorAgent } from "../../_components/DocterAgentCard";
+import { doctorAgent } from "../../_components/DoctorAgentCard";
 
 export type SessionDetail = {
   id: number;
@@ -68,7 +68,6 @@ const MedicalVoiceAgent = () => {
 
   const GetSessionDetails = async () => {
     const result = await axios.get("/api/session-chat?sessionId=" + sessionId);
-    console.log("Session Detail Data is : ", result.data);
     setSessionDetail(result.data);
   };
 
@@ -84,7 +83,6 @@ const MedicalVoiceAgent = () => {
     }
 
     setLoading(true);
-    console.log("VAPI Public Key:", process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY);
 
     const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY);
     setVapiInstance(vapi);
@@ -106,8 +104,6 @@ const MedicalVoiceAgent = () => {
         ],
       },
     };
-
-    console.log("Starting Vapi call with config:", VapiAgentConfig);
 
     // Start voice conversation
     //@ts-ignore
@@ -133,7 +129,6 @@ const MedicalVoiceAgent = () => {
     vapi.on("message", (message) => {
       if (message.type === "transcript") {
         const { role, transcriptType, transcript } = message;
-        console.log(`${message.role}: ${message.transcript}`);
         if (transcriptType === "partial") {
           setLiveTranscript(transcript);
           setCurrentRoll(role);
@@ -181,8 +176,11 @@ const MedicalVoiceAgent = () => {
     setVapiInstance(null);
 
     const result = await GenerateReport();
-    console.log("Generated Report is : ", result);
-    toast.success("Your report has been generated successfully.");
+    if (result) {
+      toast.success("Your report has been generated successfully.");
+    } else {
+      toast.error("Failed to generate report. Please try again.");
+    }
     setLoading(false);
 
     router.replace(`/dashboard`);
@@ -196,13 +194,56 @@ const MedicalVoiceAgent = () => {
   };
 
   const GenerateReport = async () => {
-    const result = await axios.post("/api/medical-report/", {
-      messages: messages,
-      sessionDetail: sessionDetail,
-      sessionId: sessionId,
-    });
+    try {
+      // Validate data before sending
+      if (!messages || messages.length === 0) {
+        console.error("No messages available for report generation");
+        toast.error("No conversation data available for report generation");
+        return null;
+      }
 
-    return result.data;
+      if (!sessionDetail) {
+        console.error("No session detail available for report generation");
+        toast.error("No session data available for report generation");
+        return null;
+      }
+
+      if (!sessionId) {
+        console.error("No session ID available for report generation");
+        toast.error("No session ID available for report generation");
+        return null;
+      }
+
+      console.log("Generating report with data:", {
+        messagesLength: messages.length,
+        sessionDetail: sessionDetail ? "present" : "missing",
+        sessionId: sessionId,
+      });
+
+      const result = await axios.post("/api/medical-report", {
+        messages: messages,
+        sessionDetail: sessionDetail,
+        sessionId: sessionId,
+      });
+
+      console.log("Report generated successfully:", result.data);
+      return result.data;
+    } catch (error) {
+      console.error("GenerateReport error:", error);
+      if (axios.isAxiosError(error)) {
+        console.error("API Error Details:", {
+          status: error.response?.status,
+          data: error.response?.data,
+          message: error.message,
+        });
+        toast.error(
+          `Failed to generate report: ${error.response?.data?.error || error.message}`,
+        );
+      } else {
+        toast.error("Failed to generate medical report");
+      }
+      return null;
+    }
   };
 
   return (

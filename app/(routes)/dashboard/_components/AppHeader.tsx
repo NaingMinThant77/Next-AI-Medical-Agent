@@ -3,16 +3,7 @@
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Home,
-  Clock,
-  CreditCard,
-  User,
-  Menu,
-  X,
-  Moon,
-  Sun,
-} from "lucide-react";
+import { Home, Clock, CreditCard, Menu, X, Moon, Sun } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 

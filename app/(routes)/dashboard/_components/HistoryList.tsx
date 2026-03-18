@@ -2,23 +2,24 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { Calendar } from "lucide-react";
 import axios from "axios";
 import HistoryTable from "./HistoryTable";
 import { SessionDetail } from "../medical-agent/[sessionId]/page";
 import NoRecentConsultation from "./NoRecentConsultation";
-import { Button } from "@/components/ui/button";
+import Pagination from "./Pagination";
 
 const HistoryList = () => {
   const [historyList, setHistoryList] = useState<SessionDetail[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
   const itemsPerPage = 5;
 
   const GetHistoryList = useMemo(
     () => async () => {
+      setLoading(true);
       const result = await axios.get("/api/session-chat?sessionId=all");
-      console.log("History List Data is : ", result.data);
 
       // Filter for last 30 days
       const thirtyDaysAgo = new Date();
@@ -39,6 +40,7 @@ const HistoryList = () => {
       const paginatedData = filteredData.slice(startIndex, endIndex);
 
       setHistoryList(paginatedData);
+      setLoading(false);
     },
     [currentPage],
   );
@@ -74,38 +76,21 @@ const HistoryList = () => {
       </div>
 
       {/* Content */}
-      {historyList.length == 0 ? (
+      {historyList.length == 0 && !loading ? (
         <NoRecentConsultation />
+      ) : loading ? (
+        <div className="flex justify-center items-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
       ) : (
         <div className="space-y-4">
           <HistoryTable historyList={historyList} />
-
-          {/* Pagination */}
-          <div className="flex items-center justify-between mt-6">
-            <div className="text-sm text-muted-foreground">
-              Page {currentPage} of {totalPages}
-            </div>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handlePreviousPage}
-                disabled={currentPage === 1}
-              >
-                <ChevronLeft className="w-4 h-4" />
-                Previous
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-              >
-                Next
-                <ChevronRight className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePreviousPage={handlePreviousPage}
+            handleNextPage={handleNextPage}
+          />
         </div>
       )}
     </div>

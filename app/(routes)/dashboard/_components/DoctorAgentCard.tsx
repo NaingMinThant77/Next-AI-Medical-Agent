@@ -21,7 +21,7 @@ type props = {
   onConsult?: (doctorAgent: doctorAgent) => void;
 };
 
-const DockerAgentCard = ({ doctorAgent, onConsult }: props) => {
+const DockorAgentCard = ({ doctorAgent, onConsult }: props) => {
   const { has } = useAuth();
   const paidUser = has?.({ plan: "pro" });
 
@@ -102,4 +102,4 @@ const DockerAgentCard = ({ doctorAgent, onConsult }: props) => {
   );
 };
 
-export default DockerAgentCard;
+export default DockorAgentCard;

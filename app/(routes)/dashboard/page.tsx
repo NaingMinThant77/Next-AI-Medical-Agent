@@ -1,5 +1,5 @@
 import HistoryList from "./_components/HistoryList";
-import DockerAgentList from "./_components/DocterAgentList";
+import DoctorAgentList from "./_components/DoctorAgentList";
 import AddNewSessionDialog from "./_components/AddNewSessionDialog";
 
 const Dashboard = () => {
@@ -30,7 +30,7 @@ const Dashboard = () => {
 
           {/* Doctor Agents Section */}
           <div className="lg:col-span-5">
-            <DockerAgentList />
+            <DoctorAgentList />
           </div>
         </div>
       </div>

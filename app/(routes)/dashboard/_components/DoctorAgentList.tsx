@@ -3,10 +3,10 @@
 import { AIDoctorAgents } from "@/shared/list";
 import { useState } from "react";
 import { Users, Star } from "lucide-react";
-import DockerAgentCard, { doctorAgent } from "./DocterAgentCard";
+import DoctorAgentCard, { doctorAgent } from "./DoctorAgentCard";
 import AddNewSessionDialog from "./AddNewSessionDialog";
 
-const DockerAgentList = () => {
+const DoctorAgentList = () => {
   const [selectedDoctor, setSelectedDoctor] = useState<doctorAgent | null>(
     null,
   );
@@ -68,7 +68,7 @@ const DockerAgentList = () => {
               key={index}
               className="transform transition-all duration-300 hover:scale-105"
             >
-              <DockerAgentCard doctorAgent={doctor} onConsult={handleConsult} />
+              <DoctorAgentCard doctorAgent={doctor} onConsult={handleConsult} />
             </div>
           ))}
         </div>
@@ -102,4 +102,4 @@ const DockerAgentList = () => {
   );
 };
 
-export default DockerAgentList;
+export default DoctorAgentList;

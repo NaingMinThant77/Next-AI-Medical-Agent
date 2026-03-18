@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@clerk/nextjs";
-import { doctorAgent } from "./DocterAgentCard";
+import { doctorAgent } from "./DoctorAgentCard";
 import Image from "next/image";
 
 type props = {

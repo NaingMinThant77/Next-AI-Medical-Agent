@@ -39,6 +39,14 @@ export async function POST(req: NextRequest) {
   const { messages, sessionDetail, sessionId } = await req.json();
 
   try {
+    // Check if OpenAI API key is configured
+    if (!process.env.OPEN_ROUTER_API_KEY) {
+      return NextResponse.json(
+        { error: "AI service is not available" },
+        { status: 503 },
+      );
+    }
+
     const UserInput =
       "AI Doctor Agent Info: " +
       JSON.stringify(sessionDetail) +
@@ -61,8 +69,6 @@ export async function POST(req: NextRequest) {
       .replace(/```json\n?/g, "")
       .replace(/```\n?/g, "");
 
-    console.log("Medical report response:", Resp);
-
     let JSONResp;
     try {
       JSONResp = JSON.parse(Resp);
@@ -84,13 +90,10 @@ export async function POST(req: NextRequest) {
     }
 
     // Save to Database
-    const result = await db
+    await db
       .update(SessionChatTable)
       .set({ report: JSONResp, conversation: messages })
-      .where(eq(SessionChatTable.sessionId, sessionId))
-      .returning();
-
-    console.log("Report saved:", result);
+      .where(eq(SessionChatTable.sessionId, sessionId));
 
     return NextResponse.json({
       success: true,
@@ -99,6 +102,10 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error("Medical report generation error:", error);
+    console.error(
+      "Error stack:",
+      error instanceof Error ? error.stack : "No stack trace",
+    );
     return NextResponse.json(
       {
         error: "Failed to generate medical report",

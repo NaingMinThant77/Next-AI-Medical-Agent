@@ -119,3 +119,40 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function GET(req: NextRequest) {
+  const user = await currentUser();
+
+  try {
+    if (!user?.primaryEmailAddress?.emailAddress) {
+      return NextResponse.json(
+        { error: "User not authenticated" },
+        { status: 401 },
+      );
+    }
+
+    const userEmail = user.primaryEmailAddress.emailAddress;
+
+    // Get user by email
+    const userRecord = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.email, userEmail))
+      .limit(1);
+
+    if (userRecord.length === 0) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(userRecord[0]);
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return NextResponse.json(
+      {
+        error: "Internal server error",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 },
+    );
+  }
+}

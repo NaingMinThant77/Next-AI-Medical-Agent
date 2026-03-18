@@ -15,8 +15,6 @@ type props = {
 };
 
 const ViewReportDialog = ({ record }: props) => {
-  console.log("Medical Record", record);
-
   const report = record.report as any;
   const conversation = (record as any).conversation || [];
 
