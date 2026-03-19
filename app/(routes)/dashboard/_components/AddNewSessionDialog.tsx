@@ -220,7 +220,13 @@ const AddNewSessionDialog = ({
         </DialogHeader>
         <DialogFooter className="bg-muted/50 rounded-b-2xl p-6">
           <DialogClose asChild>
-            <Button variant="outline" className="rounded-full px-6">
+            <Button
+              variant="outline"
+              className="rounded-full px-6"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
               Cancel
             </Button>
           </DialogClose>
