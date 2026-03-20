@@ -1,4 +1,7 @@
+"use client";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,6 +12,9 @@ import {
 } from "@/components/ui/dialog";
 import { SessionDetail } from "../medical-agent/[sessionId]/page";
 import moment from "moment";
+import { Download, Loader2 } from "lucide-react";
+import { pdf } from "@react-pdf/renderer";
+import MedicalReportPDF from "./PDF/medical-report-pdf";
 
 type props = {
   record: SessionDetail;
@@ -17,6 +23,29 @@ type props = {
 const ViewReportDialog = ({ record }: props) => {
   const report = record.report as any;
   const conversation = (record as any).conversation || [];
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const handleDownloadPDF = async () => {
+    setIsGenerating(true);
+    try {
+      const doc = <MedicalReportPDF record={record} />;
+      const pdfBlob = await pdf(doc).toBlob();
+
+      // Create download link
+      const url = URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `medical-report-${record.id}-${moment(new Date(record.createdOn)).format("YYYY-MM-DD")}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   return (
     <Dialog>
@@ -30,14 +59,26 @@ const ViewReportDialog = ({ record }: props) => {
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-center">
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold text-foreground">
-                Medical AI Voice Agent Report
-              </h2>
+        <DialogHeader className="flex flex-row items-center justify-between border-b pb-4">
+          <DialogTitle className="text-left">
+            <div className="text-2xl font-bold text-foreground">
+              Medical AI Voice Agent Report
             </div>
           </DialogTitle>
+          <Button
+            onClick={handleDownloadPDF}
+            disabled={isGenerating}
+            variant="default"
+            size="sm"
+            className="flex items-center gap-2"
+          >
+            {isGenerating ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Download className="h-4 w-4" />
+            )}
+            {isGenerating ? "Generating..." : "Download PDF"}
+          </Button>
         </DialogHeader>
 
         <div className="space-y-6 mt-4">

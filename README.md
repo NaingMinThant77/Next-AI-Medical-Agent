@@ -20,7 +20,7 @@
 
 ## 🌟 Overview
 
-**MediVoice AI** is a cutting-edge AI Medical Voice Agent built with Next.js that revolutionizes healthcare consultations. Users can describe their symptoms, get matched with specialized AI doctors, and conduct voice conversations for medical advice. After each consultation, users receive comprehensive medical reports in structured JSON format.
+**MediVoice AI** is a cutting-edge AI Medical Voice Agent built with Next.js that revolutionizes healthcare consultations. Users can describe their symptoms, get matched with specialized AI doctors, and conduct voice conversations for medical advice. After each consultation, users receive comprehensive medical reports in structured PDF format.
 
 ### ✨ Key Features
 
@@ -278,7 +278,7 @@ NEXT_PUBLIC_VAPI_PUBLIC_KEY=your_vapi_public_key
 ![Image](https://github.com/user-attachments/assets/9ff523c6-37d0-423f-9410-d64656e19c45)
 
 **📊 Medical Reports**
-<img width="950" height="592" alt="Medical Report" src="https://github.com/user-attachments/assets/d1f171c1-bfa4-46ab-badf-d48ad7ff4112" />
+<img width="703" height="643" alt="Image" src="https://github.com/user-attachments/assets/8d825b5a-42a5-46f8-8522-4e0d1da1f973" />
 
 **📊 History Page With Data**
 
